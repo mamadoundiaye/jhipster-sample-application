@@ -1,0 +1,42 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="patient">
+      <h2 data-cy="patientDetailsHeading"><span jhiTranslate="jhipsterSampleApplicationApp.patient.detail.title">Patient</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ patient.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="jhipsterSampleApplicationApp.patient.noss">Noss</span></dt>
+        <dd>
+          <span>{{ patient.noss }}</span>
+        </dd>
+        <dt><span jhiTranslate="jhipsterSampleApplicationApp.patient.nom">Nom</span></dt>
+        <dd>
+          <span>{{ patient.nom }}</span>
+        </dd>
+        <dt><span jhiTranslate="jhipsterSampleApplicationApp.patient.consultation">Consultation</span></dt>
+        <dd>
+          <div *ngIf="patient.consultation">
+            <a [routerLink]="['/consultation', patient.consultation?.id, 'view']">{{ patient.consultation?.id }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/patient', patient.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

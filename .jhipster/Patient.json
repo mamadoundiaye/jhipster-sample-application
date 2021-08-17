@@ -1,0 +1,31 @@
+{
+  "name": "Patient",
+  "fields": [
+    {
+      "fieldName": "noss",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "nom",
+      "fieldType": "String"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "consultation",
+      "otherEntityRelationshipName": "patient",
+      "relationshipName": "consultation"
+    }
+  ],
+  "entityTableName": "patient",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210817141029"
+}
