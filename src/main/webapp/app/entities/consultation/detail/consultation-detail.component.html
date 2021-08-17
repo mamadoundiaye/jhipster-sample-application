@@ -1,0 +1,45 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="consultation">
+      <h2 data-cy="consultationDetailsHeading">
+        <span jhiTranslate="jhipsterSampleApplicationApp.consultation.detail.title">Consultation</span>
+      </h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ consultation.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="jhipsterSampleApplicationApp.consultation.nO">N O</span></dt>
+        <dd>
+          <span>{{ consultation.nO }}</span>
+        </dd>
+        <dt><span jhiTranslate="jhipsterSampleApplicationApp.consultation.date">Date</span></dt>
+        <dd>
+          <span>{{ consultation.date | formatMediumDate }}</span>
+        </dd>
+        <dt><span jhiTranslate="jhipsterSampleApplicationApp.consultation.medicament">Medicament</span></dt>
+        <dd>
+          <span *ngFor="let medicament of consultation.medicaments; let last = last">
+            <a [routerLink]="['/medicament', medicament?.id, 'view']">{{ medicament.id }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/consultation', consultation.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,44 @@
+{
+  "name": "Consultation",
+  "fields": [
+    {
+      "fieldName": "nO",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "date",
+      "fieldType": "LocalDate"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "medecin",
+      "otherEntityRelationshipName": "consultation",
+      "relationshipName": "medecin"
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "patient",
+      "otherEntityRelationshipName": "consultation",
+      "relationshipName": "patient"
+    },
+    {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "medicament",
+      "otherEntityRelationshipName": "consultation",
+      "relationshipName": "medicament",
+      "ownerSide": true
+    }
+  ],
+  "entityTableName": "consultation",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": "*",
+  "changelogDate": "20210817141027"
+}

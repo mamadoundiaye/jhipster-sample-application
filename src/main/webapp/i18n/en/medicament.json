@@ -1,0 +1,26 @@
+{
+  "jhipsterSampleApplicationApp": {
+    "medicament": {
+      "home": {
+        "title": "Medicaments",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Medicament",
+        "createOrEditLabel": "Create or edit a Medicament",
+        "notFound": "No Medicaments found"
+      },
+      "created": "A new Medicament is created with identifier {{ param }}",
+      "updated": "A Medicament is updated with identifier {{ param }}",
+      "deleted": "A Medicament is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Medicament {{ id }}?"
+      },
+      "detail": {
+        "title": "Medicament"
+      },
+      "id": "ID",
+      "code": "Code",
+      "libelle": "Libelle",
+      "consultation": "Consultation"
+    }
+  }
+}
