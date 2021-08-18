@@ -3,12 +3,10 @@ import { HttpResponse } from '@angular/common/http';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { finalize, map } from 'rxjs/operators';
+import { finalize } from 'rxjs/operators';
 
 import { IPatient, Patient } from '../patient.model';
 import { PatientService } from '../service/patient.service';
-import { IConsultation } from 'app/entities/consultation/consultation.model';
-import { ConsultationService } from 'app/entities/consultation/service/consultation.service';
 
 @Component({
   selector: 'jhi-patient-update',
@@ -17,27 +15,17 @@ import { ConsultationService } from 'app/entities/consultation/service/consultat
 export class PatientUpdateComponent implements OnInit {
   isSaving = false;
 
-  consultationsSharedCollection: IConsultation[] = [];
-
   editForm = this.fb.group({
     id: [],
     noss: [],
     nom: [],
-    consultation: [],
   });
 
-  constructor(
-    protected patientService: PatientService,
-    protected consultationService: ConsultationService,
-    protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
-  ) {}
+  constructor(protected patientService: PatientService, protected activatedRoute: ActivatedRoute, protected fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ patient }) => {
       this.updateForm(patient);
-
-      this.loadRelationshipsOptions();
     });
   }
 
@@ -53,10 +41,6 @@ export class PatientUpdateComponent implements OnInit {
     } else {
       this.subscribeToSaveResponse(this.patientService.create(patient));
     }
-  }
-
-  trackConsultationById(index: number, item: IConsultation): number {
-    return item.id!;
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IPatient>>): void {
@@ -83,25 +67,7 @@ export class PatientUpdateComponent implements OnInit {
       id: patient.id,
       noss: patient.noss,
       nom: patient.nom,
-      consultation: patient.consultation,
     });
-
-    this.consultationsSharedCollection = this.consultationService.addConsultationToCollectionIfMissing(
-      this.consultationsSharedCollection,
-      patient.consultation
-    );
-  }
-
-  protected loadRelationshipsOptions(): void {
-    this.consultationService
-      .query()
-      .pipe(map((res: HttpResponse<IConsultation[]>) => res.body ?? []))
-      .pipe(
-        map((consultations: IConsultation[]) =>
-          this.consultationService.addConsultationToCollectionIfMissing(consultations, this.editForm.get('consultation')!.value)
-        )
-      )
-      .subscribe((consultations: IConsultation[]) => (this.consultationsSharedCollection = consultations));
   }
 
   protected createFromForm(): IPatient {
@@ -110,7 +76,6 @@ export class PatientUpdateComponent implements OnInit {
       id: this.editForm.get(['id'])!.value,
       noss: this.editForm.get(['noss'])!.value,
       nom: this.editForm.get(['nom'])!.value,
-      consultation: this.editForm.get(['consultation'])!.value,
     };
   }
 }

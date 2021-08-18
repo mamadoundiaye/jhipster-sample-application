@@ -2,6 +2,8 @@ package com.mycompany.myapp.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -27,9 +29,10 @@ public class Patient implements Serializable {
     @Column(name = "nom")
     private String nom;
 
-    @ManyToOne
-    @JsonIgnoreProperties(value = { "medicaments", "medecins", "patients" }, allowSetters = true)
-    private Consultation consultation;
+    @OneToMany(mappedBy = "patient")
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "medicaments", "medecin", "patient" }, allowSetters = true)
+    private Set<Consultation> consultations = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -71,17 +74,35 @@ public class Patient implements Serializable {
         this.nom = nom;
     }
 
-    public Consultation getConsultation() {
-        return this.consultation;
+    public Set<Consultation> getConsultations() {
+        return this.consultations;
     }
 
-    public Patient consultation(Consultation consultation) {
-        this.setConsultation(consultation);
+    public Patient consultations(Set<Consultation> consultations) {
+        this.setConsultations(consultations);
         return this;
     }
 
-    public void setConsultation(Consultation consultation) {
-        this.consultation = consultation;
+    public Patient addConsultation(Consultation consultation) {
+        this.consultations.add(consultation);
+        consultation.setPatient(this);
+        return this;
+    }
+
+    public Patient removeConsultation(Consultation consultation) {
+        this.consultations.remove(consultation);
+        consultation.setPatient(null);
+        return this;
+    }
+
+    public void setConsultations(Set<Consultation> consultations) {
+        if (this.consultations != null) {
+            this.consultations.forEach(i -> i.setPatient(null));
+        }
+        if (consultations != null) {
+            consultations.forEach(i -> i.setPatient(this));
+        }
+        this.consultations = consultations;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

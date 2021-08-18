@@ -9,6 +9,10 @@ import { IConsultation, Consultation } from '../consultation.model';
 import { ConsultationService } from '../service/consultation.service';
 import { IMedicament } from 'app/entities/medicament/medicament.model';
 import { MedicamentService } from 'app/entities/medicament/service/medicament.service';
+import { IMedecin } from 'app/entities/medecin/medecin.model';
+import { MedecinService } from 'app/entities/medecin/service/medecin.service';
+import { IPatient } from 'app/entities/patient/patient.model';
+import { PatientService } from 'app/entities/patient/service/patient.service';
 
 @Component({
   selector: 'jhi-consultation-update',
@@ -18,17 +22,23 @@ export class ConsultationUpdateComponent implements OnInit {
   isSaving = false;
 
   medicamentsSharedCollection: IMedicament[] = [];
+  medecinsSharedCollection: IMedecin[] = [];
+  patientsSharedCollection: IPatient[] = [];
 
   editForm = this.fb.group({
     id: [],
     nO: [],
     date: [],
     medicaments: [],
+    medecin: [],
+    patient: [],
   });
 
   constructor(
     protected consultationService: ConsultationService,
     protected medicamentService: MedicamentService,
+    protected medecinService: MedecinService,
+    protected patientService: PatientService,
     protected activatedRoute: ActivatedRoute,
     protected fb: FormBuilder
   ) {}
@@ -56,6 +66,14 @@ export class ConsultationUpdateComponent implements OnInit {
   }
 
   trackMedicamentById(index: number, item: IMedicament): number {
+    return item.id!;
+  }
+
+  trackMedecinById(index: number, item: IMedecin): number {
+    return item.id!;
+  }
+
+  trackPatientById(index: number, item: IPatient): number {
     return item.id!;
   }
 
@@ -95,11 +113,21 @@ export class ConsultationUpdateComponent implements OnInit {
       nO: consultation.nO,
       date: consultation.date,
       medicaments: consultation.medicaments,
+      medecin: consultation.medecin,
+      patient: consultation.patient,
     });
 
     this.medicamentsSharedCollection = this.medicamentService.addMedicamentToCollectionIfMissing(
       this.medicamentsSharedCollection,
       ...(consultation.medicaments ?? [])
+    );
+    this.medecinsSharedCollection = this.medecinService.addMedecinToCollectionIfMissing(
+      this.medecinsSharedCollection,
+      consultation.medecin
+    );
+    this.patientsSharedCollection = this.patientService.addPatientToCollectionIfMissing(
+      this.patientsSharedCollection,
+      consultation.patient
     );
   }
 
@@ -113,6 +141,22 @@ export class ConsultationUpdateComponent implements OnInit {
         )
       )
       .subscribe((medicaments: IMedicament[]) => (this.medicamentsSharedCollection = medicaments));
+
+    this.medecinService
+      .query()
+      .pipe(map((res: HttpResponse<IMedecin[]>) => res.body ?? []))
+      .pipe(
+        map((medecins: IMedecin[]) => this.medecinService.addMedecinToCollectionIfMissing(medecins, this.editForm.get('medecin')!.value))
+      )
+      .subscribe((medecins: IMedecin[]) => (this.medecinsSharedCollection = medecins));
+
+    this.patientService
+      .query()
+      .pipe(map((res: HttpResponse<IPatient[]>) => res.body ?? []))
+      .pipe(
+        map((patients: IPatient[]) => this.patientService.addPatientToCollectionIfMissing(patients, this.editForm.get('patient')!.value))
+      )
+      .subscribe((patients: IPatient[]) => (this.patientsSharedCollection = patients));
   }
 
   protected createFromForm(): IConsultation {
@@ -122,6 +166,8 @@ export class ConsultationUpdateComponent implements OnInit {
       nO: this.editForm.get(['nO'])!.value,
       date: this.editForm.get(['date'])!.value,
       medicaments: this.editForm.get(['medicaments'])!.value,
+      medecin: this.editForm.get(['medecin'])!.value,
+      patient: this.editForm.get(['patient'])!.value,
     };
   }
 }

@@ -4,7 +4,7 @@ export interface IMedecin {
   id?: number;
   matricule?: string | null;
   nom?: string | null;
-  consultation?: IConsultation | null;
+  consultations?: IConsultation[] | null;
 }
 
 export class Medecin implements IMedecin {
@@ -12,7 +12,7 @@ export class Medecin implements IMedecin {
     public id?: number,
     public matricule?: string | null,
     public nom?: string | null,
-    public consultation?: IConsultation | null
+    public consultations?: IConsultation[] | null
   ) {}
 }
 

@@ -56,6 +56,8 @@ public class CacheConfiguration {
             createCache(cm, com.mycompany.myapp.domain.Medicament.class.getName());
             createCache(cm, com.mycompany.myapp.domain.Medicament.class.getName() + ".consultations");
             createCache(cm, com.mycompany.myapp.domain.Patient.class.getName());
+            createCache(cm, com.mycompany.myapp.domain.Medecin.class.getName() + ".consultations");
+            createCache(cm, com.mycompany.myapp.domain.Patient.class.getName() + ".consultations");
             // jhipster-needle-ehcache-add-entry
         };
     }

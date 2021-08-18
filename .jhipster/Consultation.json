@@ -19,13 +19,13 @@
       "ownerSide": true
     },
     {
-      "relationshipType": "one-to-many",
+      "relationshipType": "many-to-one",
       "otherEntityName": "medecin",
       "otherEntityRelationshipName": "consultation",
       "relationshipName": "medecin"
     },
     {
-      "relationshipType": "one-to-many",
+      "relationshipType": "many-to-one",
       "otherEntityName": "patient",
       "otherEntityRelationshipName": "consultation",
       "relationshipName": "patient"
@@ -34,7 +34,7 @@
   "entityTableName": "consultation",
   "dto": "no",
   "pagination": "no",
-  "service": "serviceImpl",
+  "service": "serviceClass",
   "jpaMetamodelFiltering": false,
   "fluentMethods": true,
   "readOnly": false,

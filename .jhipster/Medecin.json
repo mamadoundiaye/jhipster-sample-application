@@ -12,7 +12,7 @@
   ],
   "relationships": [
     {
-      "relationshipType": "many-to-one",
+      "relationshipType": "one-to-many",
       "otherEntityName": "consultation",
       "otherEntityRelationshipName": "medecin",
       "relationshipName": "consultation"
@@ -21,7 +21,7 @@
   "entityTableName": "medecin",
   "dto": "no",
   "pagination": "no",
-  "service": "serviceImpl",
+  "service": "serviceClass",
   "jpaMetamodelFiltering": false,
   "fluentMethods": true,
   "readOnly": false,

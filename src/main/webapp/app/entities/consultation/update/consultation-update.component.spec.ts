@@ -11,6 +11,10 @@ import { ConsultationService } from '../service/consultation.service';
 import { IConsultation, Consultation } from '../consultation.model';
 import { IMedicament } from 'app/entities/medicament/medicament.model';
 import { MedicamentService } from 'app/entities/medicament/service/medicament.service';
+import { IMedecin } from 'app/entities/medecin/medecin.model';
+import { MedecinService } from 'app/entities/medecin/service/medecin.service';
+import { IPatient } from 'app/entities/patient/patient.model';
+import { PatientService } from 'app/entities/patient/service/patient.service';
 
 import { ConsultationUpdateComponent } from './consultation-update.component';
 
@@ -21,6 +25,8 @@ describe('Component Tests', () => {
     let activatedRoute: ActivatedRoute;
     let consultationService: ConsultationService;
     let medicamentService: MedicamentService;
+    let medecinService: MedecinService;
+    let patientService: PatientService;
 
     beforeEach(() => {
       TestBed.configureTestingModule({
@@ -35,6 +41,8 @@ describe('Component Tests', () => {
       activatedRoute = TestBed.inject(ActivatedRoute);
       consultationService = TestBed.inject(ConsultationService);
       medicamentService = TestBed.inject(MedicamentService);
+      medecinService = TestBed.inject(MedecinService);
+      patientService = TestBed.inject(PatientService);
 
       comp = fixture.componentInstance;
     });
@@ -59,16 +67,60 @@ describe('Component Tests', () => {
         expect(comp.medicamentsSharedCollection).toEqual(expectedCollection);
       });
 
+      it('Should call Medecin query and add missing value', () => {
+        const consultation: IConsultation = { id: 456 };
+        const medecin: IMedecin = { id: 54047 };
+        consultation.medecin = medecin;
+
+        const medecinCollection: IMedecin[] = [{ id: 5578 }];
+        jest.spyOn(medecinService, 'query').mockReturnValue(of(new HttpResponse({ body: medecinCollection })));
+        const additionalMedecins = [medecin];
+        const expectedCollection: IMedecin[] = [...additionalMedecins, ...medecinCollection];
+        jest.spyOn(medecinService, 'addMedecinToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+        activatedRoute.data = of({ consultation });
+        comp.ngOnInit();
+
+        expect(medecinService.query).toHaveBeenCalled();
+        expect(medecinService.addMedecinToCollectionIfMissing).toHaveBeenCalledWith(medecinCollection, ...additionalMedecins);
+        expect(comp.medecinsSharedCollection).toEqual(expectedCollection);
+      });
+
+      it('Should call Patient query and add missing value', () => {
+        const consultation: IConsultation = { id: 456 };
+        const patient: IPatient = { id: 31374 };
+        consultation.patient = patient;
+
+        const patientCollection: IPatient[] = [{ id: 55499 }];
+        jest.spyOn(patientService, 'query').mockReturnValue(of(new HttpResponse({ body: patientCollection })));
+        const additionalPatients = [patient];
+        const expectedCollection: IPatient[] = [...additionalPatients, ...patientCollection];
+        jest.spyOn(patientService, 'addPatientToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+        activatedRoute.data = of({ consultation });
+        comp.ngOnInit();
+
+        expect(patientService.query).toHaveBeenCalled();
+        expect(patientService.addPatientToCollectionIfMissing).toHaveBeenCalledWith(patientCollection, ...additionalPatients);
+        expect(comp.patientsSharedCollection).toEqual(expectedCollection);
+      });
+
       it('Should update editForm', () => {
         const consultation: IConsultation = { id: 456 };
         const medicaments: IMedicament = { id: 14855 };
         consultation.medicaments = [medicaments];
+        const medecin: IMedecin = { id: 4694 };
+        consultation.medecin = medecin;
+        const patient: IPatient = { id: 80783 };
+        consultation.patient = patient;
 
         activatedRoute.data = of({ consultation });
         comp.ngOnInit();
 
         expect(comp.editForm.value).toEqual(expect.objectContaining(consultation));
         expect(comp.medicamentsSharedCollection).toContain(medicaments);
+        expect(comp.medecinsSharedCollection).toContain(medecin);
+        expect(comp.patientsSharedCollection).toContain(patient);
       });
     });
 
@@ -141,6 +193,22 @@ describe('Component Tests', () => {
         it('Should return tracked Medicament primary key', () => {
           const entity = { id: 123 };
           const trackResult = comp.trackMedicamentById(0, entity);
+          expect(trackResult).toEqual(entity.id);
+        });
+      });
+
+      describe('trackMedecinById', () => {
+        it('Should return tracked Medecin primary key', () => {
+          const entity = { id: 123 };
+          const trackResult = comp.trackMedecinById(0, entity);
+          expect(trackResult).toEqual(entity.id);
+        });
+      });
+
+      describe('trackPatientById', () => {
+        it('Should return tracked Patient primary key', () => {
+          const entity = { id: 123 };
+          const trackResult = comp.trackPatientById(0, entity);
           expect(trackResult).toEqual(entity.id);
         });
       });

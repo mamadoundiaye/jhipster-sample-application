@@ -3,12 +3,10 @@ import { HttpResponse } from '@angular/common/http';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { finalize, map } from 'rxjs/operators';
+import { finalize } from 'rxjs/operators';
 
 import { IMedecin, Medecin } from '../medecin.model';
 import { MedecinService } from '../service/medecin.service';
-import { IConsultation } from 'app/entities/consultation/consultation.model';
-import { ConsultationService } from 'app/entities/consultation/service/consultation.service';
 
 @Component({
   selector: 'jhi-medecin-update',
@@ -17,27 +15,17 @@ import { ConsultationService } from 'app/entities/consultation/service/consultat
 export class MedecinUpdateComponent implements OnInit {
   isSaving = false;
 
-  consultationsSharedCollection: IConsultation[] = [];
-
   editForm = this.fb.group({
     id: [],
     matricule: [],
     nom: [],
-    consultation: [],
   });
 
-  constructor(
-    protected medecinService: MedecinService,
-    protected consultationService: ConsultationService,
-    protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
-  ) {}
+  constructor(protected medecinService: MedecinService, protected activatedRoute: ActivatedRoute, protected fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ medecin }) => {
       this.updateForm(medecin);
-
-      this.loadRelationshipsOptions();
     });
   }
 
@@ -53,10 +41,6 @@ export class MedecinUpdateComponent implements OnInit {
     } else {
       this.subscribeToSaveResponse(this.medecinService.create(medecin));
     }
-  }
-
-  trackConsultationById(index: number, item: IConsultation): number {
-    return item.id!;
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IMedecin>>): void {
@@ -83,25 +67,7 @@ export class MedecinUpdateComponent implements OnInit {
       id: medecin.id,
       matricule: medecin.matricule,
       nom: medecin.nom,
-      consultation: medecin.consultation,
     });
-
-    this.consultationsSharedCollection = this.consultationService.addConsultationToCollectionIfMissing(
-      this.consultationsSharedCollection,
-      medecin.consultation
-    );
-  }
-
-  protected loadRelationshipsOptions(): void {
-    this.consultationService
-      .query()
-      .pipe(map((res: HttpResponse<IConsultation[]>) => res.body ?? []))
-      .pipe(
-        map((consultations: IConsultation[]) =>
-          this.consultationService.addConsultationToCollectionIfMissing(consultations, this.editForm.get('consultation')!.value)
-        )
-      )
-      .subscribe((consultations: IConsultation[]) => (this.consultationsSharedCollection = consultations));
   }
 
   protected createFromForm(): IMedecin {
@@ -110,7 +76,6 @@ export class MedecinUpdateComponent implements OnInit {
       id: this.editForm.get(['id'])!.value,
       matricule: this.editForm.get(['matricule'])!.value,
       nom: this.editForm.get(['nom'])!.value,
-      consultation: this.editForm.get(['consultation'])!.value,
     };
   }
 }

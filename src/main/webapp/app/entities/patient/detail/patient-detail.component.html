@@ -22,12 +22,6 @@
         <dd>
           <span>{{ patient.nom }}</span>
         </dd>
-        <dt><span jhiTranslate="jhipsterSampleApplicationApp.patient.consultation">Consultation</span></dt>
-        <dd>
-          <div *ngIf="patient.consultation">
-            <a [routerLink]="['/consultation', patient.consultation?.id, 'view']">{{ patient.consultation?.id }}</a>
-          </div>
-        </dd>
       </dl>
 
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

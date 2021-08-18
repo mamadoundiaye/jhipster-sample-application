@@ -31,6 +31,18 @@
             >{{ last ? '' : ', ' }}
           </span>
         </dd>
+        <dt><span jhiTranslate="jhipsterSampleApplicationApp.consultation.medecin">Medecin</span></dt>
+        <dd>
+          <div *ngIf="consultation.medecin">
+            <a [routerLink]="['/medecin', consultation.medecin?.id, 'view']">{{ consultation.medecin?.id }}</a>
+          </div>
+        </dd>
+        <dt><span jhiTranslate="jhipsterSampleApplicationApp.consultation.patient">Patient</span></dt>
+        <dd>
+          <div *ngIf="consultation.patient">
+            <a [routerLink]="['/patient', consultation.patient?.id, 'view']">{{ consultation.patient?.id }}</a>
+          </div>
+        </dd>
       </dl>
 
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
