@@ -1,0 +1,42 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="medecin">
+      <h2 data-cy="medecinDetailsHeading"><span jhiTranslate="jhipsterSampleApplicationApp.medecin.detail.title">Medecin</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ medecin.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="jhipsterSampleApplicationApp.medecin.matricule">Matricule</span></dt>
+        <dd>
+          <span>{{ medecin.matricule }}</span>
+        </dd>
+        <dt><span jhiTranslate="jhipsterSampleApplicationApp.medecin.nom">Nom</span></dt>
+        <dd>
+          <span>{{ medecin.nom }}</span>
+        </dd>
+        <dt><span jhiTranslate="jhipsterSampleApplicationApp.medecin.consultation">Consultation</span></dt>
+        <dd>
+          <div *ngIf="medecin.consultation">
+            <a [routerLink]="['/consultation', medecin.consultation?.id, 'view']">{{ medecin.consultation?.id }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/medecin', medecin.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

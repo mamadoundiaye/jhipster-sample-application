@@ -1,0 +1,28 @@
+{
+  "jhipsterSampleApplicationApp": {
+    "consultation": {
+      "home": {
+        "title": "Consultations",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Consultation",
+        "createOrEditLabel": "Create or edit a Consultation",
+        "notFound": "No Consultations found"
+      },
+      "created": "A new Consultation is created with identifier {{ param }}",
+      "updated": "A Consultation is updated with identifier {{ param }}",
+      "deleted": "A Consultation is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Consultation {{ id }}?"
+      },
+      "detail": {
+        "title": "Consultation"
+      },
+      "id": "ID",
+      "nO": "N O",
+      "date": "Date",
+      "medicament": "Medicament",
+      "medecin": "Medecin",
+      "patient": "Patient"
+    }
+  }
+}

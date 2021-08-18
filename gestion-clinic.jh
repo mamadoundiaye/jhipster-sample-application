@@ -1,0 +1,49 @@
+
+entity Medecin {
+	Matricule String
+    Nom String
+}
+
+entity Consultation {
+	NO Integer
+    Date LocalDate
+}
+
+// an ignored comment
+/** not an ignored comment */
+entity Medicament {
+	Code String,
+	Libelle String,
+}
+
+entity Patient {
+	Noss String 
+    Nom String
+}
+
+
+
+
+
+relationship ManyToMany {
+	Consultation to Medicament
+}
+
+relationship ManyToOne {
+	Medecin to Consultation,
+
+}
+
+relationship ManyToOne {
+	Patient to Consultation,
+
+}
+
+service Consultation with serviceImpl
+service Patient with serviceImpl
+service Medecin with serviceImpl
+
+
+
+
+
