@@ -59,6 +59,36 @@
             </option>
           </select>
         </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="jhipsterSampleApplicationApp.consultation.medecin" for="field_medecin"
+            >Medecin</label
+          >
+          <select class="form-control" id="field_medecin" data-cy="medecin" name="medecin" formControlName="medecin">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="medecinOption.id === editForm.get('medecin')!.value?.id ? editForm.get('medecin')!.value : medecinOption"
+              *ngFor="let medecinOption of medecinsSharedCollection; trackBy: trackMedecinById"
+            >
+              {{ medecinOption.id }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" jhiTranslate="jhipsterSampleApplicationApp.consultation.patient" for="field_patient"
+            >Patient</label
+          >
+          <select class="form-control" id="field_patient" data-cy="patient" name="patient" formControlName="patient">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="patientOption.id === editForm.get('patient')!.value?.id ? editForm.get('patient')!.value : patientOption"
+              *ngFor="let patientOption of patientsSharedCollection; trackBy: trackPatientById"
+            >
+              {{ patientOption.id }}
+            </option>
+          </select>
+        </div>
       </div>
 
       <div>

@@ -36,6 +36,8 @@
           <th scope="col"><span jhiTranslate="jhipsterSampleApplicationApp.consultation.nO">N O</span></th>
           <th scope="col"><span jhiTranslate="jhipsterSampleApplicationApp.consultation.date">Date</span></th>
           <th scope="col"><span jhiTranslate="jhipsterSampleApplicationApp.consultation.medicament">Medicament</span></th>
+          <th scope="col"><span jhiTranslate="jhipsterSampleApplicationApp.consultation.medecin">Medecin</span></th>
+          <th scope="col"><span jhiTranslate="jhipsterSampleApplicationApp.consultation.patient">Patient</span></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -51,6 +53,16 @@
               <a class="form-control-static" [routerLink]="['/medicament', medicament.id, 'view']">{{ medicament.id }}</a
               >{{ last ? '' : ', ' }}
             </span>
+          </td>
+          <td>
+            <div *ngIf="consultation.medecin">
+              <a [routerLink]="['/medecin', consultation.medecin?.id, 'view']">{{ consultation.medecin?.id }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="consultation.patient">
+              <a [routerLink]="['/patient', consultation.patient?.id, 'view']">{{ consultation.patient?.id }}</a>
+            </div>
           </td>
           <td class="text-right">
             <div class="btn-group">

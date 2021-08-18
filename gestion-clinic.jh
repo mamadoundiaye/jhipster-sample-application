@@ -29,20 +29,20 @@ relationship ManyToMany {
 	Consultation to Medicament
 }
 
-relationship ManyToOne {
+relationship OneToMany {
 	Medecin to Consultation,
 
 }
 
-relationship ManyToOne {
+relationship OneToMany {
 	Patient to Consultation,
 
 }
 
-service Consultation with serviceImpl
-service Patient with serviceImpl
-service Medecin with serviceImpl
-
+service Consultation with serviceClass
+service Patient with serviceClass
+service Medecin with serviceClass
+service Medicament with serviceClass
 
 
 

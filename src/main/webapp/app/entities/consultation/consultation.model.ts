@@ -8,8 +8,8 @@ export interface IConsultation {
   nO?: number | null;
   date?: dayjs.Dayjs | null;
   medicaments?: IMedicament[] | null;
-  medecins?: IMedecin[] | null;
-  patients?: IPatient[] | null;
+  medecin?: IMedecin | null;
+  patient?: IPatient | null;
 }
 
 export class Consultation implements IConsultation {
@@ -18,8 +18,8 @@ export class Consultation implements IConsultation {
     public nO?: number | null,
     public date?: dayjs.Dayjs | null,
     public medicaments?: IMedicament[] | null,
-    public medecins?: IMedecin[] | null,
-    public patients?: IPatient[] | null
+    public medecin?: IMedecin | null,
+    public patient?: IPatient | null
   ) {}
 }
 

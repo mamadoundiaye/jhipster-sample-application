@@ -9,8 +9,6 @@ import { of, Subject } from 'rxjs';
 
 import { MedecinService } from '../service/medecin.service';
 import { IMedecin, Medecin } from '../medecin.model';
-import { IConsultation } from 'app/entities/consultation/consultation.model';
-import { ConsultationService } from 'app/entities/consultation/service/consultation.service';
 
 import { MedecinUpdateComponent } from './medecin-update.component';
 
@@ -20,7 +18,6 @@ describe('Component Tests', () => {
     let fixture: ComponentFixture<MedecinUpdateComponent>;
     let activatedRoute: ActivatedRoute;
     let medecinService: MedecinService;
-    let consultationService: ConsultationService;
 
     beforeEach(() => {
       TestBed.configureTestingModule({
@@ -34,44 +31,18 @@ describe('Component Tests', () => {
       fixture = TestBed.createComponent(MedecinUpdateComponent);
       activatedRoute = TestBed.inject(ActivatedRoute);
       medecinService = TestBed.inject(MedecinService);
-      consultationService = TestBed.inject(ConsultationService);
 
       comp = fixture.componentInstance;
     });
 
     describe('ngOnInit', () => {
-      it('Should call Consultation query and add missing value', () => {
-        const medecin: IMedecin = { id: 456 };
-        const consultation: IConsultation = { id: 64530 };
-        medecin.consultation = consultation;
-
-        const consultationCollection: IConsultation[] = [{ id: 33289 }];
-        jest.spyOn(consultationService, 'query').mockReturnValue(of(new HttpResponse({ body: consultationCollection })));
-        const additionalConsultations = [consultation];
-        const expectedCollection: IConsultation[] = [...additionalConsultations, ...consultationCollection];
-        jest.spyOn(consultationService, 'addConsultationToCollectionIfMissing').mockReturnValue(expectedCollection);
-
-        activatedRoute.data = of({ medecin });
-        comp.ngOnInit();
-
-        expect(consultationService.query).toHaveBeenCalled();
-        expect(consultationService.addConsultationToCollectionIfMissing).toHaveBeenCalledWith(
-          consultationCollection,
-          ...additionalConsultations
-        );
-        expect(comp.consultationsSharedCollection).toEqual(expectedCollection);
-      });
-
       it('Should update editForm', () => {
         const medecin: IMedecin = { id: 456 };
-        const consultation: IConsultation = { id: 81184 };
-        medecin.consultation = consultation;
 
         activatedRoute.data = of({ medecin });
         comp.ngOnInit();
 
         expect(comp.editForm.value).toEqual(expect.objectContaining(medecin));
-        expect(comp.consultationsSharedCollection).toContain(consultation);
       });
     });
 
@@ -136,16 +107,6 @@ describe('Component Tests', () => {
         expect(medecinService.update).toHaveBeenCalledWith(medecin);
         expect(comp.isSaving).toEqual(false);
         expect(comp.previousState).not.toHaveBeenCalled();
-      });
-    });
-
-    describe('Tracking relationships identifiers', () => {
-      describe('trackConsultationById', () => {
-        it('Should return tracked Consultation primary key', () => {
-          const entity = { id: 123 };
-          const trackResult = comp.trackConsultationById(0, entity);
-          expect(trackResult).toEqual(entity.id);
-        });
       });
     });
   });

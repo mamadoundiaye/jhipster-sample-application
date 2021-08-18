@@ -35,7 +35,6 @@
           <th scope="col"><span jhiTranslate="global.field.id">ID</span></th>
           <th scope="col"><span jhiTranslate="jhipsterSampleApplicationApp.medecin.matricule">Matricule</span></th>
           <th scope="col"><span jhiTranslate="jhipsterSampleApplicationApp.medecin.nom">Nom</span></th>
-          <th scope="col"><span jhiTranslate="jhipsterSampleApplicationApp.medecin.consultation">Consultation</span></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -46,11 +45,6 @@
           </td>
           <td>{{ medecin.matricule }}</td>
           <td>{{ medecin.nom }}</td>
-          <td>
-            <div *ngIf="medecin.consultation">
-              <a [routerLink]="['/consultation', medecin.consultation?.id, 'view']">{{ medecin.consultation?.id }}</a>
-            </div>
-          </td>
           <td class="text-right">
             <div class="btn-group">
               <button

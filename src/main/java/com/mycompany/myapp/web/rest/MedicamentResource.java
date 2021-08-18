@@ -2,6 +2,7 @@ package com.mycompany.myapp.web.rest;
 
 import com.mycompany.myapp.domain.Medicament;
 import com.mycompany.myapp.repository.MedicamentRepository;
+import com.mycompany.myapp.service.MedicamentService;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -12,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
@@ -22,7 +22,6 @@ import tech.jhipster.web.util.ResponseUtil;
  */
 @RestController
 @RequestMapping("/api")
-@Transactional
 public class MedicamentResource {
 
     private final Logger log = LoggerFactory.getLogger(MedicamentResource.class);
@@ -32,9 +31,12 @@ public class MedicamentResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
+    private final MedicamentService medicamentService;
+
     private final MedicamentRepository medicamentRepository;
 
-    public MedicamentResource(MedicamentRepository medicamentRepository) {
+    public MedicamentResource(MedicamentService medicamentService, MedicamentRepository medicamentRepository) {
+        this.medicamentService = medicamentService;
         this.medicamentRepository = medicamentRepository;
     }
 
@@ -51,7 +53,7 @@ public class MedicamentResource {
         if (medicament.getId() != null) {
             throw new BadRequestAlertException("A new medicament cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Medicament result = medicamentRepository.save(medicament);
+        Medicament result = medicamentService.save(medicament);
         return ResponseEntity
             .created(new URI("/api/medicaments/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
@@ -85,7 +87,7 @@ public class MedicamentResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Medicament result = medicamentRepository.save(medicament);
+        Medicament result = medicamentService.save(medicament);
         return ResponseEntity
             .ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, medicament.getId().toString()))
@@ -120,21 +122,7 @@ public class MedicamentResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Optional<Medicament> result = medicamentRepository
-            .findById(medicament.getId())
-            .map(
-                existingMedicament -> {
-                    if (medicament.getCode() != null) {
-                        existingMedicament.setCode(medicament.getCode());
-                    }
-                    if (medicament.getLibelle() != null) {
-                        existingMedicament.setLibelle(medicament.getLibelle());
-                    }
-
-                    return existingMedicament;
-                }
-            )
-            .map(medicamentRepository::save);
+        Optional<Medicament> result = medicamentService.partialUpdate(medicament);
 
         return ResponseUtil.wrapOrNotFound(
             result,
@@ -150,7 +138,7 @@ public class MedicamentResource {
     @GetMapping("/medicaments")
     public List<Medicament> getAllMedicaments() {
         log.debug("REST request to get all Medicaments");
-        return medicamentRepository.findAll();
+        return medicamentService.findAll();
     }
 
     /**
@@ -162,7 +150,7 @@ public class MedicamentResource {
     @GetMapping("/medicaments/{id}")
     public ResponseEntity<Medicament> getMedicament(@PathVariable Long id) {
         log.debug("REST request to get Medicament : {}", id);
-        Optional<Medicament> medicament = medicamentRepository.findById(id);
+        Optional<Medicament> medicament = medicamentService.findOne(id);
         return ResponseUtil.wrapOrNotFound(medicament);
     }
 
@@ -175,7 +163,7 @@ public class MedicamentResource {
     @DeleteMapping("/medicaments/{id}")
     public ResponseEntity<Void> deleteMedicament(@PathVariable Long id) {
         log.debug("REST request to delete Medicament : {}", id);
-        medicamentRepository.deleteById(id);
+        medicamentService.delete(id);
         return ResponseEntity
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
