@@ -43,7 +43,9 @@
     "devServerPort": 4200,
     "clientTheme": "none",
     "clientThemeVariant": "",
-    "reactive": false
+    "reactive": false,
+    "entities": ["Medecin", "Consultation", "Medicament", "Patient"],
+    "lastLiquibaseTimestamp": 1629275149000
   },
   "git-provider": "GitHub",
   "git-company": "mamadoundiaye",
